@@ -8,10 +8,30 @@
 *
 *@section Description
 *
+*	Interator module for general C application use. There are two
+*	types of implementation: simple and trapezoid.
+*
+*	In case of low sampling frequency and high precission integration is
+*	needed then it is recommended to use trapezoid one.
 *
 *@section Code_example
 *@code
 *
+*	// Declare simple integral instance
+*	static p_integrator_simple_t g_integrator_simple = NULL;
+*
+*	// Init integrator
+*	if ( eINTEGRATOR_OK != integrator_simple_init( &g_integrator_simple, APP_STEWARD_LOOP_PERIOD_S, 0.0 ))
+*   {
+*    	// Initialization failed...
+*    	// Further action here...
+*   }
+*
+*	// Update - integrate wanted signal
+*	@period_time
+*	{
+*		integral_of_signal = integrator_simple_update( g_integrator_simple, signal );
+*	}
 *
 *@endcode
 *
@@ -27,7 +47,6 @@
 // Includes
 ////////////////////////////////////////////////////////////////////////////////
 #include "integrator.h"
-
 
 ////////////////////////////////////////////////////////////////////////////////
 // Definitions
@@ -63,21 +82,9 @@ typedef struct integrator_trapezoid_s
 // Function prototypes
 ////////////////////////////////////////////////////////////////////////////////
 
-
 ////////////////////////////////////////////////////////////////////////////////
 // Functions
 ////////////////////////////////////////////////////////////////////////////////
-
-////////////////////////////////////////////////////////////////////////////////
-/*!
-* @brief    Calculate slew rate factor base on update time.
-*
-* @param[in]  	dt			- Update (period) time
-* @param[in]	slew_rate	- Wanted slew rate
-* @return       k_rate		- Slew rate factor
-*/
-////////////////////////////////////////////////////////////////////////////////
-
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -97,23 +104,14 @@ typedef struct integrator_trapezoid_s
 
 ////////////////////////////////////////////////////////////////////////////////
 /*!
-* @brief    Initialize rate limiter
+* @brief    Initialize simple integrator
 *
-* @note Rising/Falling slew rate is references to change on seconds.
-*
-* 		E.g.:
-* 			- for 1V/s -> put rise/fall rate = 1.0
-* 			- for 0.5V/s -> put rise/fall rate = 0.5
-*
-* @param[out]  	p_rl_inst	- Pointer to rate limiter instance
-* @param[in]  	rise_rate	- Rising slew rate
-* @param[in]  	fall_rate	- Falling slew rate
+* @param[out]  	p_int		- Pointer to integral instance
 * @param[in]  	dt			- Update (period) time
+* @param[in]  	init_value	- Initial value of integral
 * @return       status		- Either OK or Error
 */
 ////////////////////////////////////////////////////////////////////////////////
-
-
 integrator_status_t integrator_simple_init(p_integrator_simple_t * p_int, const float32_t dt, const float32_t init_value)
 {
 	integrator_status_t status = eINTEGRATOR_OK;
@@ -146,7 +144,14 @@ integrator_status_t integrator_simple_init(p_integrator_simple_t * p_int, const 
 	return status;
 }
 
-
+////////////////////////////////////////////////////////////////////////////////
+/*!
+* @brief    Get initialization flag of integrator
+*
+* @param[out]  	int_inst	- Pointer to integral instance
+* @return       is_init		- Initialization success flag
+*/
+////////////////////////////////////////////////////////////////////////////////
 bool integrator_simple_is_init(p_integrator_simple_t int_inst)
 {
 	bool is_init = false;
@@ -159,7 +164,15 @@ bool integrator_simple_is_init(p_integrator_simple_t int_inst)
 	return is_init;
 }
 
-
+////////////////////////////////////////////////////////////////////////////////
+/*!
+* @brief    Update simple integrator
+*
+* @param[out]  	int_inst	- Pointer to integral instance
+* @param[in]  	x			- Input signal
+* @return       y			- Output (integrated) signal
+*/
+////////////////////////////////////////////////////////////////////////////////
 float32_t integrator_simple_update(p_integrator_simple_t int_inst, const float32_t x)
 {
 	float32_t y = 0.0f;
@@ -180,7 +193,15 @@ float32_t integrator_simple_update(p_integrator_simple_t int_inst, const float32
 	return y;
 }
 
-
+////////////////////////////////////////////////////////////////////////////////
+/*!
+* @brief    Reset simple integrator to specified value
+*
+* @param[out]  	int_inst	- Pointer to integral instance
+* @param[in]  	rst_value	- Value to reset integrator
+* @return       status		- Either OK or ERROR
+*/
+////////////////////////////////////////////////////////////////////////////////
 integrator_status_t	integrator_simple_reset(p_integrator_simple_t int_inst, const float32_t rst_value)
 {
 	integrator_status_t status = eINTEGRATOR_OK;
@@ -197,7 +218,16 @@ integrator_status_t	integrator_simple_reset(p_integrator_simple_t int_inst, cons
 	return status;
 }
 
-
+////////////////////////////////////////////////////////////////////////////////
+/*!
+* @brief    Initialize trapezoid integrator
+*
+* @param[out]  	p_int		- Pointer to integral instance
+* @param[in]  	dt			- Update (period) time
+* @param[in]  	init_value	- Initial value of integral
+* @return       status		- Either OK or Error
+*/
+////////////////////////////////////////////////////////////////////////////////
 integrator_status_t integrator_trapezoid_init(p_integrator_trapezoid_t * p_int, const float32_t dt, const float32_t init_value)
 {
 	integrator_status_t status = eINTEGRATOR_OK;
@@ -231,7 +261,14 @@ integrator_status_t integrator_trapezoid_init(p_integrator_trapezoid_t * p_int, 
 	return status;
 }
 
-
+////////////////////////////////////////////////////////////////////////////////
+/*!
+* @brief    Get initialization flag of integrator
+*
+* @param[out]  	int_inst	- Pointer to integral instance
+* @return       is_init		- Initialization success flag
+*/
+////////////////////////////////////////////////////////////////////////////////
 bool integrator_trapezoid_is_init(p_integrator_trapezoid_t int_inst)
 {
 	bool is_init = false;
@@ -244,7 +281,15 @@ bool integrator_trapezoid_is_init(p_integrator_trapezoid_t int_inst)
 	return is_init;
 }
 
-
+////////////////////////////////////////////////////////////////////////////////
+/*!
+* @brief    Update simple integrator
+*
+* @param[out]  	int_inst	- Pointer to integral instance
+* @param[in]  	x			- Input signal
+* @return       y			- Output (integrated) signal
+*/
+////////////////////////////////////////////////////////////////////////////////
 float32_t integrator_trapezoid_update(p_integrator_trapezoid_t int_inst, const float32_t x)
 {
 	float32_t y = 0.0f;
@@ -266,7 +311,15 @@ float32_t integrator_trapezoid_update(p_integrator_trapezoid_t int_inst, const f
 	return y;
 }
 
-
+////////////////////////////////////////////////////////////////////////////////
+/*!
+* @brief    Reset trapezoid integrator to specified value
+*
+* @param[out]  	int_inst	- Pointer to integral instance
+* @param[in]  	rst_value	- Value to reset integrator
+* @return       status		- Either OK or ERROR
+*/
+////////////////////////////////////////////////////////////////////////////////
 integrator_status_t	integrator_trapezoid_reset(p_integrator_trapezoid_t int_inst, const float32_t rst_value)
 {
 	integrator_status_t status = eINTEGRATOR_OK;
@@ -283,8 +336,6 @@ integrator_status_t	integrator_trapezoid_reset(p_integrator_trapezoid_t int_inst
 
 	return status;
 }
-
-
 
 ////////////////////////////////////////////////////////////////////////////////
 /**
