@@ -34,6 +34,13 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
+ * 	Module version
+ */
+#define INTEGRATOR_VER_MAJOR		( 1 )
+#define INTEGRATOR_VER_MINOR		( 0 )
+#define INTEGRATOR_VER_DEVELOP		( 1 )
+
+/**
  * 	Status
  */
 typedef enum
