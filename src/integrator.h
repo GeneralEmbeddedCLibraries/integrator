@@ -1,10 +1,13 @@
+// Copyright (c) 2021 Ziga Miklosic
+// All Rights Reserved
+// This software is under MIT licence (https://opensource.org/licenses/MIT)
 ////////////////////////////////////////////////////////////////////////////////
 /**
 *@file      integrator.c
 *@brief     Integrator for general purpose usage
 *@author    Ziga Miklosic
 *@date      27.02.2021
-*@version   V1.0.0
+*@version   V1.0.1
 */
 ////////////////////////////////////////////////////////////////////////////////
 /**
@@ -29,6 +32,13 @@
 ////////////////////////////////////////////////////////////////////////////////
 // Definitions
 ////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * 	Module version
+ */
+#define INTEGRATOR_VER_MAJOR		( 1 )
+#define INTEGRATOR_VER_MINOR		( 0 )
+#define INTEGRATOR_VER_DEVELOP		( 1 )
 
 /**
  * 	Status
