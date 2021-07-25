@@ -1,11 +1,30 @@
-//============================================================
-// Version 1.0.0 (xx.xx.2021)
-//============================================================
-
-Features/Changes:
+============================================================
+ Version 1.0.1 (25.07.2021)
+============================================================
  
-Solved Issues:
+ Brief:
+ 
 
-Known Issues:
+ Features/Changes:
+ - Added copyright notice
+ - Added module version
 
-TODO: 
+ Known Issues:
+
+ Todo:
+
+============================================================
+ Version 1.0.0 (28.02.2021)
+============================================================
+
+ Brief:
+ - Initial relase
+
+ Features/Changes:
+ - Simple integration
+ - Trapezoid integration
+ 
+ Solved Issues:
+
+ Known Issues:
+
